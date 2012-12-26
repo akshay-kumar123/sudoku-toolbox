@@ -18,7 +18,7 @@ public class Solver {
 	}
 	
 	
-	public void solve(SolverGoal goal) {
+	public void solve(SolverMode goal) {
 		// Mark start time
 		long startTime = System.nanoTime();
 		

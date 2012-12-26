@@ -105,7 +105,7 @@ public class SolverGrid extends DynamicGrid {
 		return false;
 	}
 	
-	public boolean depthFirstSearch(SolverGoal goal) {
+	public boolean depthFirstSearch(SolverMode goal) {
 		// Sort unfilled cells by number of candidates and create a map of the cells and their candidates for backtracking
 		PriorityQueue<Cell> cellsForDPS = new PriorityQueue<Cell>();
 		HashMap<Cell, Integer[]> backtrackMap = new HashMap<Cell, Integer[]>();
@@ -116,7 +116,7 @@ public class SolverGrid extends DynamicGrid {
 			Cell dpsCell = cellsForDPS.poll();
 			ArrayList<Integer> dpsCandidates = dpsCell.getCandidates();
 			
-			if (goal == SolverGoal.STOP_FIRST_SOLUTION) {
+			if (goal == SolverMode.STOP_FIRST_SOLUTION) {
 				// Shuffle the candidates to increase randomness
 				Collections.shuffle(dpsCandidates);
 			}
@@ -138,7 +138,7 @@ public class SolverGrid extends DynamicGrid {
 		} else {
 			solver.addSolution(toGrid());
 			int solutionsCount = solver.getSolutionsCount();
-			if (solutionsCount == 1 && goal == SolverGoal.STOP_FIRST_SOLUTION || solutionsCount == 2 && goal == SolverGoal.STOP_SECOND_SOLUTION) {
+			if (solutionsCount == 1 && goal == SolverMode.STOP_FIRST_SOLUTION || solutionsCount == 2 && goal == SolverMode.STOP_SECOND_SOLUTION) {
 				return STOP_DPS;
 			} else {
 				backtrack(backtrackMap);

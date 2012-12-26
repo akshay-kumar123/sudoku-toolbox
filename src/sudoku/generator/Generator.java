@@ -2,7 +2,7 @@ package sudoku.generator;
 
 import sudoku.Grid;
 import sudoku.solver.Solver;
-import sudoku.solver.SolverGoal;
+import sudoku.solver.SolverMode;
 import sudoku.solver.exception.CandidateNotFoundException;
 import sudoku.solver.exception.UnitConstraintException;
 import sudoku.solver.exception.ZeroCandidateException;
@@ -47,7 +47,7 @@ public class Generator {
 			//sudoku.printGrid();
 			
 			Solver solver = new Solver(sudoku);
-			solver.solve(SolverGoal.STOP_SECOND_SOLUTION);
+			solver.solve(SolverMode.STOP_SECOND_SOLUTION);
 			if (solver.foundSingleSolutions()) {
 				sudoku.printGrid();
 				solver.printSolutions();

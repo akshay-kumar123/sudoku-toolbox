@@ -3,7 +3,7 @@ package sudoku;
 import sudoku.generator.Difficulty;
 import sudoku.generator.Generator;
 import sudoku.solver.Solver;
-import sudoku.solver.SolverGoal;
+import sudoku.solver.SolverMode;
 
 public class Main {
 
@@ -32,7 +32,7 @@ public class Main {
 		grid.printGrid();
 		
 		Solver solver = new Solver(grid);
-		solver.solve(SolverGoal.DO_NOT_STOP);
+		solver.solve(SolverMode.DO_NOT_STOP);
 		solver.printSolutions();
 	}
 

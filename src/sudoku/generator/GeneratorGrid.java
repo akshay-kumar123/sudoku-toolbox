@@ -11,7 +11,7 @@ import sudoku.Grid;
 import sudoku.Unit;
 import sudoku.UnitType;
 import sudoku.solver.Solver;
-import sudoku.solver.SolverGoal;
+import sudoku.solver.SolverMode;
 import sudoku.solver.exception.CandidateNotFoundException;
 import sudoku.solver.exception.UnitConstraintException;
 import sudoku.solver.exception.ZeroCandidateException;
@@ -46,7 +46,7 @@ public class GeneratorGrid extends DynamicGrid {
 	
 	public Grid solveTerminalPattern() {
 		Solver solver = new Solver(toGrid());
-		solver.solve(SolverGoal.STOP_FIRST_SOLUTION);
+		solver.solve(SolverMode.STOP_FIRST_SOLUTION);
 		
 		ArrayList<Grid> solutions = solver.getSolutions();
 		if (solutions.size() > 0) {
