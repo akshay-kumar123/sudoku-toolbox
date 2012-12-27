@@ -5,7 +5,7 @@ import sudoku.generator.Generator;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
 
-public class Main {
+public class Sudoku {
 
 	private final static String[] TEST_GRIDS = {
 		"..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..", // Very easy
@@ -19,7 +19,7 @@ public class Main {
 	};
 	
 	
-	public Main() {
+	public Sudoku() {
 		//testSolver();
 		testGenerator();
 	}
@@ -43,7 +43,7 @@ public class Main {
 	
 	
 	public static void main(String[] args) {
-		new Main();
+		new Sudoku();
 	}
 
 }

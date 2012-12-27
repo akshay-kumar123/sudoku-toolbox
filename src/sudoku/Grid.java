@@ -2,24 +2,21 @@ package sudoku;
 
 public class Grid {
 	
-	private static final String EMPTY_GRID = ".................................................................................";
+	public static final String EMPTY_GRID = ".................................................................................";
 	
-	private String grid;
 	private int[][] gridArray;
 
 	
 	public Grid() {
-		this.grid = EMPTY_GRID;
-		toArray();
+		toArray(EMPTY_GRID);
 	}
 	
 	public Grid(String grid) {
-		this.grid = grid;
-		toArray();
+		toArray(grid);
 	}
 	
 	
-	private void toArray() {
+	private void toArray(String grid) {
 		gridArray = new int[9][9];
 		
 		for (int i = 0; i < 9; i++) {
@@ -35,6 +32,18 @@ public class Grid {
 		}
 	}
 	
+	public String toString() {
+		String grid = "";
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				int val = gridArray[i][j];
+				grid += (val != 0 ? val : ".");
+			}
+		}
+		return grid;
+	}
+	
+	
 	public int getCellValue(int x, int y) {
 		return gridArray[x][y];
 	}
@@ -43,15 +52,6 @@ public class Grid {
 		gridArray[x][y] = newVal;
 	}
 	
-	
-	private String cellValueToString(int x, int y) {
-		int value = gridArray[x][y];
-		if (value == 0) {
-			return ".";
-		} else {
-			return String.valueOf(value);
-		}
-	}
 	
 	public void printGrid() {
 		for (int i = 0; i < 9; i++) {
@@ -75,8 +75,13 @@ public class Grid {
 		System.out.println();
 	}
 	
-	public String toString() {
-		return grid;
+	private String cellValueToString(int x, int y) {
+		int value = gridArray[x][y];
+		if (value == 0) {
+			return ".";
+		} else {
+			return String.valueOf(value);
+		}
 	}
 	
 }
