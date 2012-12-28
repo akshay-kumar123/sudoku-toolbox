@@ -19,13 +19,11 @@ public class SolverGrid extends DynamicGrid {
 	private static final boolean STOP_DPS = false, CONTINUE_DPS = true;
 
 	private Solver solver;
-	private Stack<Cell> singleCandidateCells = new Stack<Cell>();
+	private Stack<SolverCell> singleCandidateCells = new Stack<SolverCell>();
 	
 	
 	public SolverGrid(Solver solver, Grid grid) throws UnitConstraintException, ZeroCandidateException {
-		super();
-		
-		cells = new Cell[9][9];
+		cells = new SolverCell[9][9];
 		units = new ArrayList<Unit>(27);
 		
 		this.solver = solver;
@@ -47,7 +45,7 @@ public class SolverGrid extends DynamicGrid {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				// Build cell
-				Cell newCell = new Cell(this, grid.getCellValue(i, j));
+				SolverCell newCell = new SolverCell(this, grid.getCellValue(i, j));
 				cells[i][j] = newCell;
 				
 				// Build units
@@ -61,7 +59,7 @@ public class SolverGrid extends DynamicGrid {
 	}
 	
 	
-	public void cellHasSingleCandidate(Cell c) {
+	public void cellHasSingleCandidate(SolverCell c) {
 		if (!singleCandidateCells.contains(c)) {
 			singleCandidateCells.push(c);
 		}
@@ -71,7 +69,7 @@ public class SolverGrid extends DynamicGrid {
 		//System.out.println("Filling in single-candidate cells...");
 		//printParsedGrid();
 		while (!singleCandidateCells.empty()) {
-			Cell c = singleCandidateCells.pop();
+			SolverCell c = singleCandidateCells.pop();
 			c.chooseCandidate(c.getCandidates().iterator().next());
 		}
 	}
@@ -83,7 +81,7 @@ public class SolverGrid extends DynamicGrid {
 		boolean gridChanged;
 		do {
 			if (isSolved()) {
-				solver.addSolution(toGrid());
+				solver.addSolution(new Grid(this));
 				// Grid is solved
 				return true;
 			}
@@ -133,10 +131,10 @@ public class SolverGrid extends DynamicGrid {
 				} catch (CandidateNotFoundException | ZeroCandidateException e) {}
 
 				backtrack(backtrackMap);
-				singleCandidateCells = new Stack<Cell>();
+				singleCandidateCells = new Stack<SolverCell>();
 			}
 		} else {
-			solver.addSolution(toGrid());
+			solver.addSolution(new Grid(this));
 			int solutionsCount = solver.getSolutionsCount();
 			if (solutionsCount == 1 && goal == SolverMode.STOP_FIRST_SOLUTION || solutionsCount == 2 && goal == SolverMode.STOP_SECOND_SOLUTION) {
 				return STOP_DPS;
@@ -163,7 +161,7 @@ public class SolverGrid extends DynamicGrid {
 	private void backtrack(HashMap<Cell, Integer[]> backtrackMap) {
 		//System.out.println("Backtracking...");
 		for (Cell c : backtrackMap.keySet()) {
-			c.resetCell((backtrackMap.get(c)));
+			((SolverCell) c).resetCell((backtrackMap.get(c)));
 		}
 	}
 	

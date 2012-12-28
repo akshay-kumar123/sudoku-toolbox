@@ -2,33 +2,50 @@ package sudoku.test.core;
 
 import static org.junit.Assert.*;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sudoku.Grid;
+import sudoku.generator.GeneratorGrid;
+import sudoku.solver.exception.UnitConstraintException;
+import sudoku.solver.exception.ZeroCandidateException;
 import sudoku.test.AllTests;
 
 public class GridTest {
 
-	@Test
-	public void newEmptyGrid() {
-		assertEquals(Grid.EMPTY_GRID, new Grid().toString());
+	private static Grid emptyGrid, testGrid;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() {
+		emptyGrid =  new Grid();
+		testGrid =  new Grid(AllTests.TEST_GRIDS[0]);
 	}
 	
 	@Test
-	public void newGrid() {
-		assertEquals(AllTests.TEST_GRIDS[0], new Grid(AllTests.TEST_GRIDS[0]).toString());
+	public void testEmptyGridInit() {
+		assertEquals(Grid.EMPTY_GRID, emptyGrid.toString());
 	}
 	
 	@Test
-	public void getCellValue() {
-		assertEquals(3, new Grid(AllTests.TEST_GRIDS[0]).getCellValue(0, 2));
+	public void testGridInitFromString() {
+		assertEquals(AllTests.TEST_GRIDS[0], testGrid.toString());
 	}
 	
 	@Test
-	public void setCellValue() {
-		Grid g = new Grid(AllTests.TEST_GRIDS[0]);
-		g.setCellValue(0, 0, 4);
-		assertEquals(4, g.getCellValue(0, 0));
+	public void testGridInitFromGeneratorGrid() throws UnitConstraintException, ZeroCandidateException {
+		GeneratorGrid dGrid = new GeneratorGrid(testGrid);
+		assertEquals(testGrid.toString(), new Grid(dGrid).toString());
+	}
+	
+	@Test
+	public void testGetCellValue() {
+		assertEquals(3, testGrid.getCellValue(0, 2));
+	}
+	
+	@Test
+	public void testSetCellValue() {
+		testGrid.setCellValue(0, 0, 4);
+		assertEquals(4, testGrid.getCellValue(0, 0));
 	}
 	
 }

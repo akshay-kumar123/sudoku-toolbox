@@ -15,6 +15,16 @@ public class Grid {
 		toArray(grid);
 	}
 	
+	public Grid(DynamicGrid dGrid) {
+		gridArray = new int[9][9];
+
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				gridArray[i][j] = dGrid.getCellValue(i, j);
+			}
+		}
+	}
+	
 	
 	private void toArray(String grid) {
 		gridArray = new int[9][9];

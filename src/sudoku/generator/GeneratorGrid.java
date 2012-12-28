@@ -19,14 +19,42 @@ import sudoku.solver.exception.ZeroCandidateException;
 public class GeneratorGrid extends DynamicGrid {
 
 	private final static int GIVENS = 3;
-	
+
 	private Difficulty difficulty;
 	
-	
-	public GeneratorGrid() {}
 
 	public GeneratorGrid(Grid grid) throws UnitConstraintException, ZeroCandidateException {
-		super(grid);
+		cells = new GeneratorCell[9][9];
+		units = new ArrayList<Unit>(27);
+		
+		// Initialize units
+		Unit[] rows = new Unit[9];
+		Unit[] cols = new Unit[9];
+		Unit[] boxes = new Unit[9];
+		
+		for (int i = 0; i < 9; i++) {
+			rows[i] = new Unit(UnitType.ROW);
+			units.add(rows[i]);
+			cols[i] = new Unit(UnitType.COLUMN);
+			units.add(cols[i]);
+			boxes[i] = new Unit(UnitType.BOX);
+			units.add(boxes[i]);
+		}
+		
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				// Build cell
+				GeneratorCell newCell = new GeneratorCell(grid.getCellValue(i, j));
+				cells[i][j] = newCell;
+				
+				// Build units
+				rows[i].addCell(newCell);
+				cols[j].addCell(newCell);
+				boxes[(i / 3) * 3 + (j / 3)].addCell(newCell);
+			}
+		}
+		
+		findAllCandidates();
 	}
 	
 	public void preFill() throws CandidateNotFoundException, ZeroCandidateException {
@@ -45,7 +73,7 @@ public class GeneratorGrid extends DynamicGrid {
 	}
 	
 	public Grid solveTerminalPattern() {
-		Solver solver = new Solver(toGrid());
+		Solver solver = new Solver(new Grid(this));
 		solver.solve(SolverMode.STOP_FIRST_SOLUTION);
 		
 		ArrayList<Grid> solutions = solver.getSolutions();
@@ -91,7 +119,7 @@ public class GeneratorGrid extends DynamicGrid {
 	}
 	
 	private boolean isDiggableCell(Cell cell, HashMap<Unit, Integer> givensPerUnit) {
-		for (Unit u : cell.getParentUnits()) {
+		for (Unit u : ((GeneratorCell) cell).getParentUnits()) {
 			if (u.getType() != UnitType.BOX && givensPerUnit.get(u) <= difficulty.getGivensRowColLowerBound()) {
 				return false;
 			}

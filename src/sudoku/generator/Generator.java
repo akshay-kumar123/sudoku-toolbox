@@ -70,7 +70,7 @@ public class Generator {
 			genGrid.preFill();
 			Grid terminalPattern = genGrid.solveTerminalPattern();
 			if (terminalPattern == null) {
-				System.out.println(genGrid.toGrid());
+				System.out.println(new Grid(genGrid));
 			}
 			return terminalPattern;
 		} catch (UnitConstraintException | ZeroCandidateException | CandidateNotFoundException e) {
@@ -82,7 +82,7 @@ public class Generator {
 		try {
 			GeneratorGrid genGrid = new GeneratorGrid(terminalPattern);
 			genGrid.digHoles(difficulty);
-			return genGrid.toGrid();
+			return new Grid(genGrid);
 		} catch (UnitConstraintException | ZeroCandidateException e) {
 			e.printStackTrace();
 			return null;
