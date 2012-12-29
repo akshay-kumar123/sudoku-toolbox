@@ -9,10 +9,17 @@ public class SolverCell extends Cell implements Comparable<SolverCell> {
 
 	private SolverGrid parent;
 	
+	
+	public SolverCell(SolverGrid parent) {
+		super();
+		this.parent = parent;
+	}
+	
 	public SolverCell(SolverGrid parent, int value) {
 		super(value);
 		this.parent = parent;
 	}
+	
 
 	@Override
 	protected void candidatesUpdated() throws ZeroCandidateException {

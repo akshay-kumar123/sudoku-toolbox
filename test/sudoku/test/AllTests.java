@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ CoreTest.class })
+@SuiteClasses({ GridTest.class, SolverCellTest.class })
 public class AllTests {
 
 	public final static String[] TEST_GRIDS = {

@@ -17,6 +17,13 @@ public abstract class Cell {
 	protected ArrayList<Integer> candidates;
 	
 	
+	public Cell() {
+		this.value = 0;
+		parentUnits = new ArrayList<Unit>(3);
+		peers = new ArrayList<Cell>(20);
+		candidates = new ArrayList<Integer>(CANDIDATES_SET);
+	}
+	
 	public Cell(int value) {
 		this.value = value;
 		parentUnits = new ArrayList<Unit>(3);
