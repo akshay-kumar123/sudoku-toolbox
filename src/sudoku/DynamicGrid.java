@@ -23,6 +23,10 @@ public abstract class DynamicGrid {
 		return cells[x][y].getValue();
 	}
 	
+	public Cell getCell(int x, int y) {
+		return cells[x][y];
+	}
+	
 	
 	public void printDynamicGrid() {
 		System.out.println();

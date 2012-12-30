@@ -16,7 +16,7 @@ public class GridTest {
 	
 	@Before
 	public void setUp() {
-		testGrid =  new Grid(AllTests.TEST_GRIDS[0]);
+		testGrid =  new Grid(TestGrid.VERY_EASY.getGridString());
 	}
 	
 	@Test
@@ -27,7 +27,7 @@ public class GridTest {
 	
 	@Test
 	public void testGridFromString() {
-		assertEquals(AllTests.TEST_GRIDS[0], testGrid.toString());
+		assertEquals(TestGrid.VERY_EASY.getGridString(), testGrid.toString());
 	}
 	
 	@Test
