@@ -1,7 +1,7 @@
 package sudoku.solver;
 
 public enum SolverMode {
-	
+		
 	// Find all solutions
 	DO_NOT_STOP,
 	

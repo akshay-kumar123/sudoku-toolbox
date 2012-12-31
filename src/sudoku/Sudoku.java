@@ -3,7 +3,6 @@ package sudoku;
 import sudoku.generator.Difficulty;
 import sudoku.generator.Generator;
 import sudoku.solver.Solver;
-import sudoku.solver.SolverMode;
 
 public class Sudoku {
 
@@ -32,8 +31,8 @@ public class Sudoku {
 		grid.printGrid();
 		
 		Solver solver = new Solver(grid);
-		solver.solve(SolverMode.DO_NOT_STOP);
-		solver.printSolutions();
+		//solver.solve(SolverMode.DO_NOT_STOP);
+		//solver.printSolutions();
 	}
 
 	private void testGenerator() {

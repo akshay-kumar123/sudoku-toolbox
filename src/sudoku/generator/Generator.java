@@ -3,7 +3,9 @@ package sudoku.generator;
 import sudoku.Grid;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
+import sudoku.solver.SolverResult;
 import sudoku.solver.exception.CandidateNotFoundException;
+import sudoku.solver.exception.InvalidGridException;
 import sudoku.solver.exception.UnitConstraintException;
 import sudoku.solver.exception.ZeroCandidateException;
 
@@ -47,8 +49,11 @@ public class Generator {
 			//sudoku.printGrid();
 			
 			Solver solver = new Solver(sudoku);
-			solver.solve(SolverMode.STOP_SECOND_SOLUTION);
-			if (solver.foundSingleSolutions()) {
+			try {
+				solver.solve(SolverMode.STOP_SECOND_SOLUTION);
+			} catch (InvalidGridException exc) {}
+			
+			if (solver.getResult() == SolverResult.ONE_SOLUTION) {
 				sudoku.printGrid();
 				solver.printSolutions();
 				keepGoing = false;
@@ -73,7 +78,7 @@ public class Generator {
 				System.out.println(new Grid(genGrid));
 			}
 			return terminalPattern;
-		} catch (UnitConstraintException | ZeroCandidateException | CandidateNotFoundException e) {
+		} catch (UnitConstraintException | ZeroCandidateException | CandidateNotFoundException | InvalidGridException e) {
 			return null;
 		}
 	}

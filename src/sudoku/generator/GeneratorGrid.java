@@ -13,6 +13,7 @@ import sudoku.UnitType;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
 import sudoku.solver.exception.CandidateNotFoundException;
+import sudoku.solver.exception.InvalidGridException;
 import sudoku.solver.exception.UnitConstraintException;
 import sudoku.solver.exception.ZeroCandidateException;
 
@@ -72,16 +73,10 @@ public class GeneratorGrid extends DynamicGrid {
 		}
 	}
 	
-	public Grid solveTerminalPattern() {
+	public Grid solveTerminalPattern() throws InvalidGridException {
 		Solver solver = new Solver(new Grid(this));
 		solver.solve(SolverMode.STOP_FIRST_SOLUTION);
-		
-		ArrayList<Grid> solutions = solver.getSolutions();
-		if (solutions.size() > 0) {
-			return solutions.get(0);
-		} else {
-			return null;
-		}
+		return solver.getSolutions().get(0);
 	}
 	
 	public void digHoles(Difficulty difficulty) {
