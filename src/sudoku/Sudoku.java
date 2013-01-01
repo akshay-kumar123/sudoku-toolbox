@@ -27,7 +27,7 @@ public class Sudoku {
 	@SuppressWarnings("unused")
 	private void testSolver() {
 		//Grid grid = new Grid("..345..9...2376........2...5.8..4.714.......232.9..6.4...5........8391...3..617..");
-		Grid grid = new Grid(TEST_GRIDS[7]);
+		StaticGrid grid = new StaticGrid(TEST_GRIDS[7]);
 		grid.printGrid();
 		
 		Solver solver = new Solver(grid);

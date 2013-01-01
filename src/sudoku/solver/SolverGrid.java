@@ -8,7 +8,7 @@ import java.util.Stack;
 
 import sudoku.Cell;
 import sudoku.DynamicGrid;
-import sudoku.Grid;
+import sudoku.StaticGrid;
 import sudoku.Unit;
 import sudoku.solver.exception.CandidateNotFoundException;
 import sudoku.solver.exception.UnitConstraintException;
@@ -22,7 +22,7 @@ public class SolverGrid extends DynamicGrid {
 	private Stack<SolverCell> singleCandidateCells = new Stack<SolverCell>();
 	
 	
-	public SolverGrid(Solver solver, Grid grid) throws UnitConstraintException, ZeroCandidateException {
+	public SolverGrid(Solver solver, StaticGrid grid) throws UnitConstraintException, ZeroCandidateException {
 		cells = new SolverCell[9][9];
 		units = new ArrayList<Unit>(27);
 		
@@ -81,7 +81,7 @@ public class SolverGrid extends DynamicGrid {
 		boolean gridChanged;
 		do {
 			if (isSolved()) {
-				solver.addSolution(new Grid(this));
+				solver.addSolution(new StaticGrid(this));
 				// Grid is solved
 				return true;
 			}
@@ -134,7 +134,7 @@ public class SolverGrid extends DynamicGrid {
 				singleCandidateCells = new Stack<SolverCell>();
 			}
 		} else {
-			solver.addSolution(new Grid(this));
+			solver.addSolution(new StaticGrid(this));
 			int solutionsCount = solver.getSolutionsCount();
 			if (solutionsCount == 1 && goal == SolverMode.STOP_FIRST_SOLUTION || solutionsCount == 2 && goal == SolverMode.STOP_SECOND_SOLUTION) {
 				return STOP_DPS;

@@ -2,22 +2,22 @@ package sudoku.solver;
 
 import java.util.ArrayList;
 
-import sudoku.Grid;
+import sudoku.StaticGrid;
 import sudoku.solver.exception.*;
 
 public class Solver {
 
-	private Grid grid;
+	private StaticGrid grid;
 	private SolverGrid solverGrid;
 
 	private SolverResult result;
-	private ArrayList<Grid> solutions;
+	private ArrayList<StaticGrid> solutions;
 	private long solvingTime;
 
 	
-	public Solver(Grid grid) {
+	public Solver(StaticGrid grid) {
 		this.grid = grid;
-		solutions = new ArrayList<Grid>();
+		solutions = new ArrayList<StaticGrid>();
 	}
 	
 	
@@ -60,7 +60,7 @@ public class Solver {
 	}
 	
 	
-	public void addSolution(Grid validGrid) {
+	public void addSolution(StaticGrid validGrid) {
 		// Prevent adding solutions after solving has completed
 		if (!solvingPerformed()) {
 			solutions.add(validGrid);
@@ -75,7 +75,7 @@ public class Solver {
 		return solutions.size();
 	}
 	
-	public ArrayList<Grid> getSolutions() {
+	public ArrayList<StaticGrid> getSolutions() {
 		return solutions;
 	}
 
@@ -108,7 +108,7 @@ public class Solver {
 		}
 		
 		// Display solution(s)
-		for (Grid g : solutions) {
+		for (StaticGrid g : solutions) {
 			g.printGrid();
 		}
 	}

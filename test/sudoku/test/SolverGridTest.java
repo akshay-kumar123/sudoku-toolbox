@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import sudoku.Grid;
+import sudoku.StaticGrid;
 import sudoku.solver.SolverGrid;
 import sudoku.solver.exception.CandidateNotFoundException;
 import sudoku.solver.exception.UnitConstraintException;
@@ -19,7 +19,7 @@ public class SolverGridTest {
 
 	@Before
 	public void setUp() throws Exception {
-		grid = new SolverGrid(null, new Grid(TestGrid.VERY_EASY.getGridString()));
+		grid = new SolverGrid(null, new StaticGrid(TestGrid.VERY_EASY.getGridString()));
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class SolverGridTest {
 	
 	@Test (expected = UnitConstraintException.class)
 	public void testWrongGrid() throws UnitConstraintException, ZeroCandidateException {
-		new SolverGrid(null, new Grid(TestGrid.WRONG_GRID.getGridString()));
+		new SolverGrid(null, new StaticGrid(TestGrid.WRONG_GRID.getGridString()));
 	}
 
 }

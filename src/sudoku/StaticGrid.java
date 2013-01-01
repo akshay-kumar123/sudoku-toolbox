@@ -1,21 +1,21 @@
 package sudoku;
 
-public class Grid {
+public class StaticGrid {
 	
 	public static final String EMPTY_GRID = ".................................................................................";
 	
 	private int[][] gridArray;
 
 	
-	public Grid() {
+	public StaticGrid() {
 		toArray(EMPTY_GRID);
 	}
 	
-	public Grid(String grid) {
+	public StaticGrid(String grid) {
 		toArray(grid);
 	}
 	
-	public Grid(DynamicGrid dGrid) {
+	public StaticGrid(DynamicGrid dGrid) {
 		gridArray = new int[9][9];
 
 		for (int i = 0; i < 9; i++) {

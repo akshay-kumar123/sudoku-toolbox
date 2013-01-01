@@ -5,24 +5,24 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import sudoku.Grid;
+import sudoku.StaticGrid;
 import sudoku.generator.GeneratorGrid;
 import sudoku.solver.exception.UnitConstraintException;
 import sudoku.solver.exception.ZeroCandidateException;
 
 public class GridTest {
 
-	private Grid testGrid;
+	private StaticGrid testGrid;
 	
 	@Before
 	public void setUp() {
-		testGrid =  new Grid(TestGrid.VERY_EASY.getGridString());
+		testGrid =  new StaticGrid(TestGrid.VERY_EASY.getGridString());
 	}
 	
 	@Test
 	public void testEmptyGrid() {
-		Grid emptyGrid =  new Grid();
-		assertEquals(Grid.EMPTY_GRID, emptyGrid.toString());
+		StaticGrid emptyGrid =  new StaticGrid();
+		assertEquals(StaticGrid.EMPTY_GRID, emptyGrid.toString());
 	}
 	
 	@Test
@@ -33,7 +33,7 @@ public class GridTest {
 	@Test
 	public void testGridFromGeneratorGrid() throws UnitConstraintException, ZeroCandidateException {
 		GeneratorGrid dGrid = new GeneratorGrid(testGrid);
-		assertEquals(testGrid.toString(), new Grid(dGrid).toString());
+		assertEquals(testGrid.toString(), new StaticGrid(dGrid).toString());
 	}
 	
 	@Test

@@ -7,7 +7,7 @@ import java.util.Stack;
 
 import sudoku.Cell;
 import sudoku.DynamicGrid;
-import sudoku.Grid;
+import sudoku.StaticGrid;
 import sudoku.Unit;
 import sudoku.UnitType;
 import sudoku.solver.Solver;
@@ -19,12 +19,12 @@ import sudoku.solver.exception.ZeroCandidateException;
 
 public class GeneratorGrid extends DynamicGrid {
 
-	private final static int GIVENS = 3;
+	public final static int PRE_FILL_GIVENS = 3;
 
 	private Difficulty difficulty;
 	
 
-	public GeneratorGrid(Grid grid) throws UnitConstraintException, ZeroCandidateException {
+	public GeneratorGrid(StaticGrid grid) throws UnitConstraintException, ZeroCandidateException {
 		cells = new GeneratorCell[9][9];
 		units = new ArrayList<Unit>(27);
 		
@@ -59,7 +59,7 @@ public class GeneratorGrid extends DynamicGrid {
 	}
 	
 	public void preFill() throws CandidateNotFoundException, ZeroCandidateException {
-		for (int i = 0; i < GIVENS; i++) {
+		for (int i = 0; i < PRE_FILL_GIVENS; i++) {
 			Cell c;
 			do {
 				int x = (int) (Math.random() * 9);
@@ -73,8 +73,8 @@ public class GeneratorGrid extends DynamicGrid {
 		}
 	}
 	
-	public Grid solveTerminalPattern() throws InvalidGridException {
-		Solver solver = new Solver(new Grid(this));
+	public StaticGrid solveTerminalPattern() throws InvalidGridException {
+		Solver solver = new Solver(new StaticGrid(this));
 		solver.solve(SolverMode.STOP_FIRST_SOLUTION);
 		return solver.getSolutions().get(0);
 	}

@@ -1,6 +1,6 @@
 package sudoku.generator;
 
-import sudoku.Grid;
+import sudoku.StaticGrid;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
 import sudoku.solver.SolverResult;
@@ -24,10 +24,10 @@ public class Generator {
 	}
 	
 	
-	public Grid generateSudoku(Difficulty difficulty) {
+	public StaticGrid generateSudoku(Difficulty difficulty) {
 		long startTime = System.nanoTime();
 
-		Grid terminalPattern;
+		StaticGrid terminalPattern;
 		do {
 		/*for (int i = 0; i < 10000; i++) {
 			if (i % 500 == 0) {
@@ -45,7 +45,7 @@ public class Generator {
 		boolean keepGoing = true;
 		while(keepGoing) {
 			//terminalPattern.printGrid();
-			Grid sudoku = digHoles(terminalPattern, difficulty);
+			StaticGrid sudoku = digHoles(terminalPattern, difficulty);
 			//sudoku.printGrid();
 			
 			Solver solver = new Solver(sudoku);
@@ -69,13 +69,13 @@ public class Generator {
 		return null;
 	}
 	
-	private Grid generateTerminalPattern() {
+	private StaticGrid generateTerminalPattern() {
 		try {
-			GeneratorGrid genGrid = new GeneratorGrid(new Grid());
+			GeneratorGrid genGrid = new GeneratorGrid(new StaticGrid());
 			genGrid.preFill();
-			Grid terminalPattern = genGrid.solveTerminalPattern();
+			StaticGrid terminalPattern = genGrid.solveTerminalPattern();
 			if (terminalPattern == null) {
-				System.out.println(new Grid(genGrid));
+				System.out.println(new StaticGrid(genGrid));
 			}
 			return terminalPattern;
 		} catch (UnitConstraintException | ZeroCandidateException | CandidateNotFoundException | InvalidGridException e) {
@@ -83,11 +83,11 @@ public class Generator {
 		}
 	}
 	
-	private Grid digHoles(Grid terminalPattern, Difficulty difficulty) {
+	private StaticGrid digHoles(StaticGrid terminalPattern, Difficulty difficulty) {
 		try {
 			GeneratorGrid genGrid = new GeneratorGrid(terminalPattern);
 			genGrid.digHoles(difficulty);
-			return new Grid(genGrid);
+			return new StaticGrid(genGrid);
 		} catch (UnitConstraintException | ZeroCandidateException e) {
 			e.printStackTrace();
 			return null;
