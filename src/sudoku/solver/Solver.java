@@ -20,6 +20,35 @@ public class Solver {
 		solutions = new ArrayList<StaticGrid>();
 	}
 	
+
+	/* Command line script */
+	public static void main(String[] args) {
+		// Check at least one argument is provided
+		if (args == null || args.length < 1) {
+			System.out.println("No grid string provided");
+			return;
+		}
+		
+		// Create and print static grid
+		StaticGrid grid;
+		try {
+			grid = new StaticGrid(args[0]);
+			grid.printGrid();
+		} catch (InvalidGridException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		
+		Solver solver = new Solver(grid);
+		try {
+			solver.solve(SolverMode.DO_NOT_STOP);
+		} catch (InvalidGridException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		solver.printSolutions();
+	}
+	
 	
 	public void solve(SolverMode goal) throws InvalidGridException {
 		// If solving has already been performed, do not try solving again
@@ -52,7 +81,7 @@ public class Solver {
 			result = SolverResult.NO_SOLUTION;
 		} catch (UnitConstraintException exc) {
 			result = SolverResult.NO_SOLUTION;
-			throw new InvalidGridException("Grid is not valid");
+			throw new InvalidGridException("The grid does not respect the rules of Sudoku");
 		} finally {
 			// Calculate solving time
 			solvingTime = (System.nanoTime() - startTime) / 1000000;

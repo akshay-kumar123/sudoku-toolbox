@@ -26,7 +26,7 @@ public class GeneratorTest {
 	}
 	
 	@Test (expected = UnitConstraintException.class)
-	public void testWrongGrid() throws UnitConstraintException, ZeroCandidateException {
+	public void testWrongGrid() throws UnitConstraintException, ZeroCandidateException, InvalidGridException {
 		new GeneratorGrid(new StaticGrid(TestGrid.WRONG_GRID.getGridString()));
 	}
 

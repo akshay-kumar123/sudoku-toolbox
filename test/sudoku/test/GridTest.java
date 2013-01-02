@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import sudoku.StaticGrid;
 import sudoku.generator.GeneratorGrid;
+import sudoku.solver.exception.InvalidGridException;
 import sudoku.solver.exception.UnitConstraintException;
 import sudoku.solver.exception.ZeroCandidateException;
 
@@ -15,7 +16,7 @@ public class GridTest {
 	private StaticGrid testGrid;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws InvalidGridException {
 		testGrid =  new StaticGrid(TestGrid.VERY_EASY.getGridString());
 	}
 	

@@ -1,5 +1,9 @@
 package sudoku;
 
+import java.util.regex.Pattern;
+
+import sudoku.solver.exception.InvalidGridException;
+
 public class StaticGrid {
 	
 	public static final String EMPTY_GRID = ".................................................................................";
@@ -11,8 +15,18 @@ public class StaticGrid {
 		toArray(EMPTY_GRID);
 	}
 	
-	public StaticGrid(String grid) {
-		toArray(grid);
+	public StaticGrid(String gridString) throws InvalidGridException {
+		// Check length (9x9=81 characters)
+		if (gridString.length() != 81) {
+			throw new InvalidGridException("Grid string must be 81 characters long");
+		}
+		
+		// Check characters (only dots and digits from 1 to 9)
+		if (!Pattern.matches("(?s)^[1-9\\.]+$", gridString)) {
+			throw new InvalidGridException("Grid string can only contain dots and digits from 1 to 9");
+		}
+		
+		toArray(gridString);
 	}
 	
 	public StaticGrid(DynamicGrid dGrid) {

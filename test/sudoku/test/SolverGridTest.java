@@ -10,6 +10,7 @@ import org.junit.Test;
 import sudoku.StaticGrid;
 import sudoku.solver.SolverGrid;
 import sudoku.solver.exception.CandidateNotFoundException;
+import sudoku.solver.exception.InvalidGridException;
 import sudoku.solver.exception.UnitConstraintException;
 import sudoku.solver.exception.ZeroCandidateException;
 
@@ -42,8 +43,18 @@ public class SolverGridTest {
 	}
 	
 	@Test (expected = UnitConstraintException.class)
-	public void testWrongGrid() throws UnitConstraintException, ZeroCandidateException {
+	public void testWrongGrid() throws UnitConstraintException, ZeroCandidateException, InvalidGridException {
 		new SolverGrid(null, new StaticGrid(TestGrid.WRONG_GRID.getGridString()));
+	}
+	
+	@Test (expected = InvalidGridException.class)
+	public void testWrongGridString() throws UnitConstraintException, ZeroCandidateException, InvalidGridException {
+		new SolverGrid(null, new StaticGrid(TestGrid.WRONG_GRID_STRING.getGridString()));
+	}
+	
+	@Test (expected = InvalidGridException.class)
+	public void testWrongGridStringLength() throws UnitConstraintException, ZeroCandidateException, InvalidGridException {
+		new SolverGrid(null, new StaticGrid(TestGrid.WRONG_GRID_STRING_LENGTH.getGridString()));
 	}
 
 }
