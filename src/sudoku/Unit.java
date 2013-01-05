@@ -3,7 +3,7 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import sudoku.solver.exception.UnitConstraintException;
+import sudoku.exception.UnitConstraintException;
 
 public class Unit {
 	
@@ -15,12 +15,12 @@ public class Unit {
 	}
 
 	
-	protected void unitComplete() throws UnitConstraintException {
-		HashSet<Integer> testSet = new HashSet<Integer>(9);
+	private void unitComplete() throws UnitConstraintException {
+		HashSet<Integer> validationSet = new HashSet<Integer>(9);
 		
 		for (Cell c : cells) {
-			// If testSet already contains the value of cell c, the grid doesn't respect unit constraints
-			if (c.isGiven() && !testSet.add(c.getValue())) {
+			// If validationSet already contains the value of cell c, the grid doesn't respect unit constraints
+			if (c.isGiven() && !validationSet.add(c.getValue())) {
 				throw new UnitConstraintException("Unit contains two cells with the same value.");
 			}
 
@@ -29,9 +29,12 @@ public class Unit {
 	}
 	
 	public void addCell(Cell c) throws UnitConstraintException {
-		cells.add(c);
-		if (cells.size() == 9) {
-			unitComplete();
+		// Make sure no cell can be added once the unit is complete
+		if (cells.size() < 9) {
+			cells.add(c);
+			if (cells.size() == 9) {
+				unitComplete();
+			}
 		}
 	}
 	

@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sudoku.StaticGrid;
+import sudoku.exception.CandidateNotFoundException;
+import sudoku.exception.InvalidGridException;
+import sudoku.exception.UnitConstraintException;
+import sudoku.exception.ZeroCandidateException;
 import sudoku.solver.SolverGrid;
-import sudoku.solver.exception.CandidateNotFoundException;
-import sudoku.solver.exception.InvalidGridException;
-import sudoku.solver.exception.UnitConstraintException;
-import sudoku.solver.exception.ZeroCandidateException;
 
 public class SolverGridTest {
 
@@ -38,7 +38,7 @@ public class SolverGridTest {
 
 	@Test
 	public void testFillInSingleCandidateCells() throws CandidateNotFoundException, ZeroCandidateException  {
-		grid.fillInSingleCandidateCells();
+		grid.fillInNakedSingleCells();
 		assertTrue(grid.isSolved());
 	}
 	

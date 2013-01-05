@@ -6,10 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sudoku.StaticGrid;
+import sudoku.exception.InvalidGridException;
+import sudoku.exception.UnitConstraintException;
+import sudoku.exception.ZeroCandidateException;
 import sudoku.generator.GeneratorGrid;
-import sudoku.solver.exception.InvalidGridException;
-import sudoku.solver.exception.UnitConstraintException;
-import sudoku.solver.exception.ZeroCandidateException;
 
 public class GridTest {
 

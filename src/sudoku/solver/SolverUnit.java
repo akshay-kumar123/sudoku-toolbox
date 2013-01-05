@@ -5,8 +5,8 @@ import java.util.Arrays;
 
 import sudoku.Cell;
 import sudoku.Unit;
-import sudoku.solver.exception.CandidateNotFoundException;
-import sudoku.solver.exception.ZeroCandidateException;
+import sudoku.exception.CandidateNotFoundException;
+import sudoku.exception.ZeroCandidateException;
 
 public class SolverUnit extends Unit {
 	

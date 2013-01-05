@@ -3,8 +3,8 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import sudoku.solver.exception.CandidateNotFoundException;
-import sudoku.solver.exception.ZeroCandidateException;
+import sudoku.exception.CandidateNotFoundException;
+import sudoku.exception.ZeroCandidateException;
 
 public abstract class Cell {
 	
@@ -35,6 +35,9 @@ public abstract class Cell {
 	}
 	
 	
+	/*
+	 * Method triggered by a unit once it's complete
+	 */
 	public void addPeersFromUnit(Unit unit) {
 		parentUnits.add(unit);
 		ArrayList<Cell> cells = unit.getCells();
@@ -57,14 +60,18 @@ public abstract class Cell {
 	}
 	
 	public void chooseCandidate(int val) throws CandidateNotFoundException, ZeroCandidateException {
-		value = val;
-
 		if (candidates.contains(val)) {
+			value = val;
 			candidates = null;
-		} else {
+		}
+		else {
 			throw new CandidateNotFoundException("Candidate not found.");
 		}
 		
+		candidateChosen();
+	}
+	
+	protected void candidateChosen() throws ZeroCandidateException {
 		for (Cell c : peers) {
 			if (!c.isGiven()) {
 				c.removeCandidate(value);
@@ -72,21 +79,18 @@ public abstract class Cell {
 		}
 	}
 	
-	public void removeCandidate(int candidate) throws ZeroCandidateException {
-		if (candidates.remove((Object)candidate)) {
+	private void removeCandidate(int candidate) throws ZeroCandidateException {
+		if (candidates.remove(new Integer(candidate))) {
 			candidatesUpdated();
 		}
 	}
+	
 	
 	protected abstract void candidatesUpdated() throws ZeroCandidateException;
 	
 	
 	public int getValue() {
 		return value;
-	}
-	
-	public void setValue(int newVal) {
-		value = newVal;
 	}
 	
 	public boolean isGiven() {

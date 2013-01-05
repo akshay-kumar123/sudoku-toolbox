@@ -10,12 +10,8 @@ import sudoku.DynamicGrid;
 import sudoku.StaticGrid;
 import sudoku.Unit;
 import sudoku.UnitType;
-import sudoku.solver.Solver;
-import sudoku.solver.SolverMode;
-import sudoku.solver.exception.CandidateNotFoundException;
-import sudoku.solver.exception.InvalidGridException;
-import sudoku.solver.exception.UnitConstraintException;
-import sudoku.solver.exception.ZeroCandidateException;
+import sudoku.exception.UnitConstraintException;
+import sudoku.exception.ZeroCandidateException;
 
 public class GeneratorGrid extends DynamicGrid {
 
@@ -24,6 +20,14 @@ public class GeneratorGrid extends DynamicGrid {
 	private Difficulty difficulty;
 	
 
+	/*
+	 * A GeneratorGrid can perform two tasks:
+	 * 	- pre-filling an empty grid that can then be used by the Solver to generate a terminal pattern, and
+	 * 	- generating a valid Sudoku from a terminal pattern to a specific level of difficulty.
+	 * 
+	 * The first task is optional as the Solver can easily generate a random terminal pattern from an empty grid by itself.
+	 * If pre-filling is performed, then the second task should be performed on a new, separate GeneratorGrid instance.
+	 */
 	public GeneratorGrid(StaticGrid grid) throws UnitConstraintException, ZeroCandidateException {
 		cells = new GeneratorCell[9][9];
 		units = new ArrayList<Unit>(27);
@@ -58,7 +62,7 @@ public class GeneratorGrid extends DynamicGrid {
 		findAllCandidates();
 	}
 	
-	public void preFill() throws CandidateNotFoundException, ZeroCandidateException {
+	public void preFill() throws ZeroCandidateException {
 		for (int i = 0; i < PRE_FILL_GIVENS; i++) {
 			Cell c;
 			do {
@@ -66,17 +70,9 @@ public class GeneratorGrid extends DynamicGrid {
 				int y = (int) (Math.random() * 9);
 				c = cells[x][y];
 			} while (c.isGiven());
-			
-			ArrayList<Integer> candidates = c.getCandidates();
-			int index = (int) (Math.random() * candidates.size());
-			c.chooseCandidate((Integer)candidates.toArray()[index]);
+
+			((GeneratorCell) c).chooseRandomCandidate();
 		}
-	}
-	
-	public StaticGrid solveTerminalPattern() throws InvalidGridException {
-		Solver solver = new Solver(new StaticGrid(this));
-		solver.solve(SolverMode.STOP_FIRST_SOLUTION);
-		return solver.getSolutions().get(0);
 	}
 	
 	public void digHoles(Difficulty difficulty) {
@@ -106,9 +102,9 @@ public class GeneratorGrid extends DynamicGrid {
 		
 		// Pop cells from stack and try to dig them
 		while(cellsToDig.size() > givensTarget) {
-			Cell digCell = cellsToDig.pop();
+			GeneratorCell digCell = (GeneratorCell)cellsToDig.pop();
 			if (isDiggableCell(digCell, givensPerUnit)) {
-				digCell.setValue(0);
+				digCell.dig();
 			}
 		}
 	}

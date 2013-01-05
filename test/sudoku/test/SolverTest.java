@@ -7,10 +7,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sudoku.StaticGrid;
+import sudoku.exception.InvalidGridException;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
 import sudoku.solver.SolverResult;
-import sudoku.solver.exception.InvalidGridException;
 
 public class SolverTest {
 

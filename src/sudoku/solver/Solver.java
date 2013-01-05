@@ -3,7 +3,7 @@ package sudoku.solver;
 import java.util.ArrayList;
 
 import sudoku.StaticGrid;
-import sudoku.solver.exception.*;
+import sudoku.exception.*;
 
 public class Solver {
 

@@ -3,7 +3,8 @@ package sudoku.solver;
 import java.util.ArrayList;
 
 import sudoku.Cell;
-import sudoku.solver.exception.ZeroCandidateException;
+import sudoku.exception.NotUniqueCandidateException;
+import sudoku.exception.ZeroCandidateException;
 
 public class SolverCell extends Cell implements Comparable<SolverCell> {
 
@@ -19,15 +20,36 @@ public class SolverCell extends Cell implements Comparable<SolverCell> {
 		super(value);
 		this.parent = parent;
 	}
+
 	
+	public boolean hasSingleCandidate() {
+		return candidates.size() == 1;
+	}
+	
+	public void chooseUniqueCandidate() throws ZeroCandidateException, NotUniqueCandidateException {
+		if (hasSingleCandidate()) {
+			value = candidates.iterator().next();
+			candidates = null;
+		}
+		else {
+			if (candidates.size() == 0) {
+				throw new ZeroCandidateException("Zero candidate left.");
+			}
+			else {
+				throw new NotUniqueCandidateException();
+			}
+		}
+
+		candidateChosen();
+	}
 
 	@Override
 	protected void candidatesUpdated() throws ZeroCandidateException {
-		if (candidates.size() == 1) {
-			parent.cellHasSingleCandidate(this);
-		} else if (candidates.size() == 0) {
+		if (candidates.size() == 0) {
 			throw new ZeroCandidateException("Zero candidate left.");
 		}
+		
+		parent.candidatesUpdatedInCell(this); 
 	}
 	
 	public void resetCell(Integer[] integers) {

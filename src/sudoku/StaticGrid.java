@@ -2,7 +2,7 @@ package sudoku;
 
 import java.util.regex.Pattern;
 
-import sudoku.solver.exception.InvalidGridException;
+import sudoku.exception.InvalidGridException;
 
 public class StaticGrid {
 	

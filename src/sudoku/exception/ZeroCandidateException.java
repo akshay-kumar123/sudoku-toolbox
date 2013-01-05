@@ -1,4 +1,4 @@
-package sudoku.solver.exception;
+package sudoku.exception;
 
 public class ZeroCandidateException extends Exception {
 

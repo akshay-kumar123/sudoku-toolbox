@@ -10,16 +10,17 @@ import sudoku.Cell;
 import sudoku.DynamicGrid;
 import sudoku.StaticGrid;
 import sudoku.Unit;
-import sudoku.solver.exception.CandidateNotFoundException;
-import sudoku.solver.exception.UnitConstraintException;
-import sudoku.solver.exception.ZeroCandidateException;
+import sudoku.exception.CandidateNotFoundException;
+import sudoku.exception.NotUniqueCandidateException;
+import sudoku.exception.UnitConstraintException;
+import sudoku.exception.ZeroCandidateException;
 
 public class SolverGrid extends DynamicGrid {
 	
 	private static final boolean STOP_DPS = false, CONTINUE_DPS = true;
 
 	private Solver solver;
-	private Stack<SolverCell> singleCandidateCells = new Stack<SolverCell>();
+	private Stack<SolverCell> nakedSingleCells = new Stack<SolverCell>();
 	
 	
 	public SolverGrid(Solver solver, StaticGrid grid) throws UnitConstraintException, ZeroCandidateException {
@@ -59,24 +60,32 @@ public class SolverGrid extends DynamicGrid {
 	}
 	
 	
-	public void cellHasSingleCandidate(SolverCell c) {
-		if (!singleCandidateCells.contains(c)) {
-			singleCandidateCells.push(c);
+	public void candidatesUpdatedInCell(SolverCell c) {
+		// Check if naked single cell
+		if (c.hasSingleCandidate() && !nakedSingleCells.contains(c)) {
+			nakedSingleCells.push(c);
 		}
 	}
 	
-	public void fillInSingleCandidateCells() throws CandidateNotFoundException, ZeroCandidateException {
-		//System.out.println("Filling in single-candidate cells...");
-		//printParsedGrid();
-		while (!singleCandidateCells.empty()) {
-			SolverCell c = singleCandidateCells.pop();
-			c.chooseCandidate(c.getCandidates().iterator().next());
+	public void fillInNakedSingleCells() throws ZeroCandidateException {
+		while (!nakedSingleCells.empty()) {
+			SolverCell c = nakedSingleCells.pop();
+			try {
+				c.chooseUniqueCandidate();
+			} catch (NotUniqueCandidateException e) {
+				// This should never happen
+				/* Note that a ZeroCandidateException occurs when the processing of another naked single cell higher in the stack 
+				 * caused the current cell to lose its unique candidate by constraint propagation. */
+				System.out.println("Program error: naked single cell should not have more than one candidate.");
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
 	}
 	
 	
 	public boolean propagateConstraints() throws CandidateNotFoundException, ZeroCandidateException {
-		fillInSingleCandidateCells();
+		fillInNakedSingleCells();
 		
 		boolean gridChanged;
 		do {
@@ -88,13 +97,13 @@ public class SolverGrid extends DynamicGrid {
 
 			gridChanged = false;
 			
-			//System.out.println("Looking for loners...");
 			for (Unit u : units) {
+				// Find loner candidate in unit; if one exist, it will be chosen directly
 				if (((SolverUnit) u).findUnitLoner()) {
-					//System.out.println("Loner chosen");
-					//printParsedGrid();
-					fillInSingleCandidateCells();
+					// Loner was found and chosen, which means that the grid has changed
 					gridChanged = true;
+					// Since the grid has changed, there might be some new naked single cells waiting to be filled
+					fillInNakedSingleCells();
 				}
 			}
 		} while (gridChanged);
@@ -124,14 +133,14 @@ public class SolverGrid extends DynamicGrid {
 				try {
 					dpsCell.chooseCandidate(i);
 					// Fill in any single-candidate cell before pursuing
-					fillInSingleCandidateCells();
+					fillInNakedSingleCells();
 					if (depthFirstSearch(goal) == STOP_DPS) {
 						return STOP_DPS;
 					}
 				} catch (CandidateNotFoundException | ZeroCandidateException e) {}
 
 				backtrack(backtrackMap);
-				singleCandidateCells = new Stack<SolverCell>();
+				nakedSingleCells = new Stack<SolverCell>();
 			}
 		} else {
 			solver.addSolution(new StaticGrid(this));
@@ -159,7 +168,6 @@ public class SolverGrid extends DynamicGrid {
 	}
 	
 	private void backtrack(HashMap<Cell, Integer[]> backtrackMap) {
-		//System.out.println("Backtracking...");
 		for (Cell c : backtrackMap.keySet()) {
 			((SolverCell) c).resetCell((backtrackMap.get(c)));
 		}

@@ -1,54 +1,30 @@
 package sudoku.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import sudoku.StaticGrid;
-import sudoku.generator.GeneratorGrid;
-import sudoku.solver.exception.CandidateNotFoundException;
-import sudoku.solver.exception.InvalidGridException;
-import sudoku.solver.exception.UnitConstraintException;
-import sudoku.solver.exception.ZeroCandidateException;
+import sudoku.generator.Generator;
 
 public class GeneratorTest {
 
-	private GeneratorGrid grid;
+	private Generator gen;
 
 	@Before
-	public void setUp() throws Exception {
-		grid = new GeneratorGrid(new StaticGrid());
+	public void setUp() {
+		gen = Generator.getInstance();
 	}
 	
-	@Test (expected = UnitConstraintException.class)
-	public void testWrongGrid() throws UnitConstraintException, ZeroCandidateException, InvalidGridException {
-		new GeneratorGrid(new StaticGrid(TestGrid.WRONG_GRID.getGridString()));
-	}
-
-	@Test
-	public void testPreFill() throws CandidateNotFoundException, ZeroCandidateException {
-		grid.preFill();
-		String preFilledGridString = new StaticGrid(grid).toString();
-		
-		Matcher m = Pattern.compile("[1-9]").matcher(preFilledGridString);
-		int count = 0;
-		while (m.find()) {
-			count++;
-		}
-		
-		assertEquals(GeneratorGrid.PRE_FILL_GIVENS, count);
-	}
 	
 	@Test
-	public void testSolveTerminalPatternRandomness() throws InvalidGridException {
+	public void testGenerateTerminalPatternRandomness() {
 		HashSet<String> set = new HashSet<String>(10);
 		for (int i = 0; i < 10; i++) {
-			if (!set.add(grid.solveTerminalPattern().toString())) {
+			if (!set.add(gen.generateTerminalPattern(false).toString())) {
 				assertFalse(true);
 				return;
 			}

@@ -2,7 +2,7 @@ package sudoku;
 
 import java.util.ArrayList;
 
-import sudoku.solver.exception.ZeroCandidateException;
+import sudoku.exception.ZeroCandidateException;
 
 public abstract class DynamicGrid {
 	

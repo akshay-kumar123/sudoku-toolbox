@@ -11,7 +11,7 @@ public class Sudoku {
 
 	private void testGenerator() {
 		Generator gen = Generator.getInstance();
-		gen.generateSudoku(Difficulty.DIFFICULT);
+		gen.generateSudoku(Difficulty.DIFFICULT, false);
 	}
 	
 	public static void main(String[] args) {

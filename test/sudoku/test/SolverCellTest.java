@@ -40,17 +40,6 @@ public class SolverCellTest {
 	
 	
 	/* 
-	 * Test method setValue
-	 */
-
-	@Test
-	public void testSetValue() {
-		givenCell.setValue(5);
-		assertEquals(5, givenCell.getValue());
-	}
-
-	
-	/* 
 	 * Test method isGiven
 	 */
 	
