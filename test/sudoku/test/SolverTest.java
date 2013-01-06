@@ -40,7 +40,7 @@ public class SolverTest {
 	public void testSolveDifficultGrid() throws InvalidGridException {
 		Solver s = new Solver(new StaticGrid(TestGrid.DIFFICULT.getGridString()));
 		s.solve(SolverMode.DO_NOT_STOP);
-		assertTrue(s.getSolvingTime() < 20);
+		assertTrue(s.getSolvingTime() < 30);
 	}
 
 	@Test

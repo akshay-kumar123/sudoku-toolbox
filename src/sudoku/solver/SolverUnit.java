@@ -19,7 +19,7 @@ public class SolverUnit extends Unit {
 
 	
 	public boolean findUnitLoner() throws CandidateNotFoundException, ZeroCandidateException {
-		boolean lonerFound = false;
+		boolean lonersCount = false;
 		
 		int[] candidateCounters = new int[9];
 		Cell[] candidateOwners = new Cell[9];
@@ -36,12 +36,12 @@ public class SolverUnit extends Unit {
 		
 		for (int i = 0; i < 9; i++) {
 			if (candidateCounters[i] == 1) {
-				lonerFound = true;
+				lonersCount = true;
 				candidateOwners[i].chooseCandidate(i + 1);
 			}
 		}
 		
-		return lonerFound;
+		return lonersCount;
 	}
 
 }

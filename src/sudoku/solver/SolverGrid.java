@@ -139,6 +139,7 @@ public class SolverGrid extends DynamicGrid {
 					}
 				} catch (CandidateNotFoundException | ZeroCandidateException e) {}
 
+				// Backtrack if an exception was caught or if depthFirstSearch returned CONTINUE_DPS
 				backtrack(backtrackMap);
 				nakedSingleCells = new Stack<SolverCell>();
 			}
