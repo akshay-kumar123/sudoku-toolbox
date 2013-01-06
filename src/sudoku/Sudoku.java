@@ -1,7 +1,6 @@
 package sudoku;
 
 import sudoku.exception.InvalidGridException;
-import sudoku.generator.Difficulty;
 import sudoku.generator.Generator;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
@@ -10,9 +9,10 @@ import sudoku.test.TestGrid;
 public class Sudoku {
 	
 	public Sudoku() {
-		testSolver();
+		testGenerator();
 	}
 
+	@SuppressWarnings("unused")
 	private void testSolver() {
 		long runningTime = 0;
 		for (int i = 0; i < 10000; i++) {
@@ -28,10 +28,9 @@ public class Sudoku {
 		System.out.println("Average running time = " + (runningTime / 10000));
 	}
 
-	@SuppressWarnings("unused")
 	private void testGenerator() {
 		Generator gen = Generator.getInstance();
-		gen.generateSudoku(Difficulty.DIFFICULT, false);
+		gen.generateTerminalPattern(false);
 	}
 	
 	public static void main(String[] args) {

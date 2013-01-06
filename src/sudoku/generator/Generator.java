@@ -10,7 +10,7 @@ import sudoku.solver.SolverResult;
 
 public class Generator {
 	
-	private final static int PREFILL_ATTEMPTS = 3;
+	public final static int PREFILL_ATTEMPTS = 4;
 	
 	private static Generator instance;
 	
@@ -67,11 +67,11 @@ public class Generator {
 			if (preFill) {
 				// If the number of cells to be pre-filled is too high, then the pre-filling might fail. 
 				// Therefore, only try pre-filling a limited number of times.
-				int tries = 0;
+				int preFillTries = 0;
 				GeneratorGrid genGrid = null;
 				
-				while (genGrid == null && tries < PREFILL_ATTEMPTS) {
-					tries++;
+				while (genGrid == null && preFillTries < PREFILL_ATTEMPTS) {
+					preFillTries++;
 	
 					// Initialize a GeneratorGrid from an empty StaticGrid
 					try {
@@ -99,6 +99,9 @@ public class Generator {
 					// If the pre-filling failed, use an empty source grid
 					sourceGrid = new StaticGrid();
 				}
+				
+				//System.out.println("Final pre-filled grid after " + tries + " attempts");
+				//sourceGrid.printGrid();
 			}
 			else {
 				sourceGrid = new StaticGrid();
@@ -107,6 +110,7 @@ public class Generator {
 			// Generate terminal pattern by solving source grid and stopping at first solution
 			Solver solver = new Solver(sourceGrid);
 			try {
+				// Using a value GeneratorGrid.PRE_FILL_GIVENS
 				solver.solve(SolverMode.STOP_FIRST_SOLUTION);
 			} catch (InvalidGridException e) {
 				// This should never happen
@@ -129,7 +133,7 @@ public class Generator {
 			// If solver's result is NO_SOLUTION, terminalPattern remains null. This should never happen when preFill is false.
 			// The probability of a pre-filled grid leading to no solution increases with the number of pre-filled cells it contains.
 		}
-		
+		//terminalPattern.printGrid();
 		return terminalPattern;
 	}
 	
