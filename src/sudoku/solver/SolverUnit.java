@@ -26,7 +26,7 @@ public class SolverUnit extends Unit {
 		Arrays.fill(candidateCounters, 0);
 		
 		for (Cell c : cells) {
-			if (!c.isGiven()) {
+			if (!c.isFilled()) {
 				for (int candidate : c.getCandidates()) {
 					candidateCounters[candidate - 1]++;
 					candidateOwners[candidate - 1] = c;

@@ -69,7 +69,7 @@ public class GeneratorGrid extends DynamicGrid {
 				int x = (int) (Math.random() * 9);
 				int y = (int) (Math.random() * 9);
 				c = cells[x][y];
-			} while (c.isGiven());
+			} while (c.isFilled());
 
 			((GeneratorCell) c).chooseRandomCandidate();
 		}

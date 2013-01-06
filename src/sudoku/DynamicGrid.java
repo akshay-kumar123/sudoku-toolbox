@@ -36,7 +36,7 @@ public abstract class DynamicGrid {
 					System.out.print(" ");
 				}
 				Cell c = cells[i][j];
-				if (c.isGiven()) {
+				if (c.isFilled()) {
 					System.out.print(c.getValue() + "          ");
 				} else {
 					String s = c.candidatesToString();

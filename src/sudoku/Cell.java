@@ -29,7 +29,7 @@ public abstract class Cell {
 		parentUnits = new ArrayList<Unit>(3);
 		peers = new ArrayList<Cell>(20);
 		
-		if (!isGiven()) {
+		if (!isFilled()) {
 			candidates = new ArrayList<Integer>(CANDIDATES_SET);
 		}
 	}
@@ -49,9 +49,9 @@ public abstract class Cell {
 	}
 	
 	public void findCandidates() throws ZeroCandidateException {
-		if (!isGiven()) {
+		if (!isFilled()) {
 			for (Cell c : peers) {
-				if (c.isGiven()) {
+				if (c.isFilled()) {
 					candidates.remove((Object)c.getValue());
 				}
 			}
@@ -73,7 +73,7 @@ public abstract class Cell {
 	
 	protected void candidateChosen() throws ZeroCandidateException {
 		for (Cell c : peers) {
-			if (!c.isGiven()) {
+			if (!c.isFilled()) {
 				c.removeCandidate(value);
 			}
 		}
@@ -93,7 +93,7 @@ public abstract class Cell {
 		return value;
 	}
 	
-	public boolean isGiven() {
+	public boolean isFilled() {
 		return value != 0;
 	}
 	
@@ -118,7 +118,7 @@ public abstract class Cell {
 	public String peersToString() {
 		String s = "[ ";
 		for (Cell c : peers) {
-			if (c.isGiven()) {
+			if (c.isFilled()) {
 				s += c.getValue() + " ";
 			}
 		}

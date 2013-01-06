@@ -20,7 +20,7 @@ public class Unit {
 		
 		for (Cell c : cells) {
 			// If validationSet already contains the value of cell c, the grid doesn't respect unit constraints
-			if (c.isGiven() && !validationSet.add(c.getValue())) {
+			if (c.isFilled() && !validationSet.add(c.getValue())) {
 				throw new UnitConstraintException("Unit contains two cells with the same value.");
 			}
 

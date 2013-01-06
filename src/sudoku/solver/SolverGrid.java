@@ -158,7 +158,7 @@ public class SolverGrid extends DynamicGrid {
 	private void prepareForDPS(PriorityQueue<Cell> cellsForDPS, HashMap<Cell, Integer[]> backtrackMap) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if (!cells[i][j].isGiven()) {
+				if (!cells[i][j].isFilled()) {
 					Cell c = cells[i][j];
 					cellsForDPS.add(c);
 					backtrackMap.put(c, c.getCandidates().toArray(new Integer[0]));
@@ -178,7 +178,7 @@ public class SolverGrid extends DynamicGrid {
 		boolean solved = true;
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if (!cells[i][j].isGiven()) {
+				if (!cells[i][j].isFilled()) {
 					solved = false;
 				}
 			}

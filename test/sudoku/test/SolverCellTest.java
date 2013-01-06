@@ -40,17 +40,17 @@ public class SolverCellTest {
 	
 	
 	/* 
-	 * Test method isGiven
+	 * Test method isFilled
 	 */
 	
 	@Test
-	public void testIsGivenOnEmptyCell() {
-		assertFalse(emptyCell.isGiven());
+	public void testIsFilledOnEmptyCell() {
+		assertFalse(emptyCell.isFilled());
 	}
 	
 	@Test
-	public void testIsGivenOnGivenCell() {
-		assertTrue(givenCell.isGiven());
+	public void testIsFilledOnGivenCell() {
+		assertTrue(givenCell.isFilled());
 	}
 
 	
