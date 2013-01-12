@@ -8,15 +8,14 @@ import sudoku.exception.CandidateNotFoundException;
 import sudoku.exception.ZeroCandidateException;
 
 public class GeneratorCell extends Cell {
+	
+	private int oldValue = 0;
+	
 
 	public GeneratorCell(int value) {
 		super(value);
 	}
-
 	
-	public void dig() {
-		value = 0;
-	}
 	
 	public void chooseRandomCandidate() throws ZeroCandidateException {
 		try {
@@ -35,6 +34,17 @@ public class GeneratorCell extends Cell {
 			throw new ZeroCandidateException("Zero candidate left.");
 		}
 	}
+
+	
+	public void dig() {
+		oldValue = value;
+		value = 0;
+	}
+	
+	public void reset() {
+		value = oldValue;
+	}
+	
 	
 	public ArrayList<Unit> getParentUnits() {
 		return parentUnits;

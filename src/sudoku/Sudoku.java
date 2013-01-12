@@ -1,6 +1,7 @@
 package sudoku;
 
 import sudoku.exception.InvalidGridException;
+import sudoku.generator.Difficulty;
 import sudoku.generator.Generator;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
@@ -30,7 +31,7 @@ public class Sudoku {
 
 	private void testGenerator() {
 		Generator gen = Generator.getInstance();
-		gen.generateTerminalPattern(false);
+		gen.generateSudoku(Difficulty.EVIL, false);
 	}
 	
 	public static void main(String[] args) {

@@ -12,6 +12,7 @@ import sudoku.exception.InvalidGridException;
 import sudoku.exception.UnitConstraintException;
 import sudoku.exception.ZeroCandidateException;
 import sudoku.generator.GeneratorGrid;
+import sudoku.generator.GeneratorGridException;
 
 public class GeneratorGridTest {
 	
@@ -21,7 +22,7 @@ public class GeneratorGridTest {
 	}
 
 	@Test
-	public void testPreFill() throws UnitConstraintException, ZeroCandidateException {
+	public void testPreFill() throws UnitConstraintException, ZeroCandidateException, GeneratorGridException {
 		// Pre-fill an empty grid
 		GeneratorGrid grid = new GeneratorGrid(new StaticGrid());
 		grid.preFill();
@@ -36,6 +37,18 @@ public class GeneratorGridTest {
 		}
 		
 		assertEquals(GeneratorGrid.PRE_FILL_GIVENS, count);
+	}
+	
+	@Test
+	public void testIsEmptyGrid() throws UnitConstraintException, ZeroCandidateException {
+		GeneratorGrid grid = new GeneratorGrid(new StaticGrid());
+		assertEquals(0, grid.getGivensCount());
+	}
+
+	@Test (expected = GeneratorGridException.class)
+	public void testPreFillNonEmptyGrid() throws UnitConstraintException, ZeroCandidateException, InvalidGridException, GeneratorGridException {
+		GeneratorGrid grid = new GeneratorGrid(new StaticGrid(TestGrid.EASY.getGridString()));
+		grid.preFill();
 	}
 
 }

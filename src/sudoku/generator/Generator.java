@@ -25,39 +25,6 @@ public class Generator {
 	}
 	
 	
-	public StaticGrid generateSudoku(Difficulty difficulty, boolean preFill) {
-		long startTime = System.nanoTime();
-
-		StaticGrid terminalPattern = generateTerminalPattern(preFill);
-
-		// Validate grid (make sure it has only one solution
-		boolean keepGoing = true;
-		while(keepGoing) {
-			//terminalPattern.printGrid();
-			StaticGrid sudoku = digHoles(terminalPattern, difficulty);
-			//sudoku.printGrid();
-			
-			Solver solver = new Solver(sudoku);
-			try {
-				solver.solve(SolverMode.STOP_SECOND_SOLUTION);
-			} catch (InvalidGridException exc) {}
-			
-			if (solver.getResult() == SolverResult.ONE_SOLUTION) {
-				sudoku.printGrid();
-				solver.printSolutions();
-				keepGoing = false;
-			} else {
-				System.out.println("Invalid grid");
-			}
-		}
-
-		// Calculate solving time
-		long solvingTime = (System.nanoTime() - startTime) / 1000000;
-		System.out.println("Duration: " + solvingTime);
-		
-		return null;
-	}
-	
 	public StaticGrid generateTerminalPattern(boolean preFill) {
 		StaticGrid terminalPattern = null;
 		
@@ -89,6 +56,11 @@ public class Generator {
 					} catch (ZeroCandidateException e) {
 						// Lose GeneratorGrid instance
 						genGrid = null;
+					} catch (GeneratorGridException e) {
+						// This should never happen
+						System.out.println("Program error: pre-filling an empty GeneratorGrid should not throw any exception.");
+						e.printStackTrace();
+						System.exit(1);
 					}
 				}
 				
@@ -99,9 +71,6 @@ public class Generator {
 					// If the pre-filling failed, use an empty source grid
 					sourceGrid = new StaticGrid();
 				}
-				
-				//System.out.println("Final pre-filled grid after " + tries + " attempts");
-				//sourceGrid.printGrid();
 			}
 			else {
 				sourceGrid = new StaticGrid();
@@ -132,20 +101,45 @@ public class Generator {
 			
 			// If solver's result is NO_SOLUTION, terminalPattern remains null. This should never happen when preFill is false.
 			// The probability of a pre-filled grid leading to no solution increases with the number of pre-filled cells it contains.
+			// Note that this is also true for the probability of producing pre-filled grids that take an extremely long time to solve.  
 		}
-		//terminalPattern.printGrid();
+
 		return terminalPattern;
 	}
 	
-	private StaticGrid digHoles(StaticGrid terminalPattern, Difficulty difficulty) {
-		try {
-			GeneratorGrid genGrid = new GeneratorGrid(terminalPattern);
-			genGrid.digHoles(difficulty);
-			return new StaticGrid(genGrid);
-		} catch (UnitConstraintException | ZeroCandidateException e) {
-			e.printStackTrace();
-			return null;
+	public StaticGrid generateSudoku(Difficulty difficulty, boolean preFill) {
+		for (int i = 0; i < 10; i++) {
+			GeneratorGrid genGrid = null;
+			StaticGrid terminalPattern = generateTerminalPattern(preFill); 
+			
+			try {
+				genGrid = new GeneratorGrid(terminalPattern);
+			} catch (UnitConstraintException | ZeroCandidateException e) {
+				// This should never happen
+				System.out.println("Program error: terminal pattern provided to GeneratorGrid constructor is invalid.");
+				System.exit(1);
+			}
+
+			StaticGrid sudoku = null;
+			try {
+				sudoku = genGrid.prune(difficulty);
+			} catch (GeneratorGridException e) {
+				// This should never happen
+				System.out.println("Program error: terminal pattern provided for pruning is not terminal.");
+				System.exit(1);
+			}
+			
+			if (sudoku != null) {
+				System.out.println("\nSudoku generated:");
+				sudoku.printGrid();
+				System.out.println(sudoku.toString());
+				return sudoku;
+			} else {
+				System.out.println("Failed to generate Sudoku with target difficulty. Trying with another terminal pattern...");
+			}
 		}
+		
+		return null;
 	}
 
 }
