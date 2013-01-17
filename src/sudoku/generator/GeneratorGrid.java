@@ -20,7 +20,7 @@ public class GeneratorGrid extends DynamicGrid {
 
 	public final static int PRE_FILL_GIVENS = 3;
 
-	private Difficulty difficulty;
+	//private Difficulty difficulty;
 	private int givensTarget;
 	//private HashMap<Unit, Integer> givensPerUnit;
 	
@@ -37,7 +37,7 @@ public class GeneratorGrid extends DynamicGrid {
 		cells = new GeneratorCell[9][9];
 		units = new ArrayList<Unit>(27);
 		
-		// Initialize units
+		// Initialise units
 		Unit[] rows = new Unit[9];
 		Unit[] cols = new Unit[9];
 		Unit[] boxes = new Unit[9];
@@ -89,19 +89,11 @@ public class GeneratorGrid extends DynamicGrid {
 			throw new GeneratorGridException("Pruning can only be performed on a terminal pattern.");
 		}
 		
-		this.difficulty = difficulty;
+		//this.difficulty = difficulty;
 
 		// Pick the target amount of givens in the grid
 		givensTarget = (int) (Math.random() * (difficulty.getGivensUpperBound() - difficulty.getGivensLowerBound() + 1) + difficulty.getGivensLowerBound());
-		System.out.println("Target givens count: " + givensTarget);
-		
-		/* Associate each unit with a counter of the remaining number of givens it contains
-		givensPerUnit = new HashMap<Unit, Integer>(18);
-		for (Unit u : units) {
-			if (u.getType() != UnitType.BOX) {
-				givensPerUnit.put(u, 9);
-			}
-		}*/
+		System.out.println("Target number of givens: " + givensTarget);
 		
 		return pruneHelper(81);
 	}
@@ -109,21 +101,13 @@ public class GeneratorGrid extends DynamicGrid {
 	int minAchieved = 81;
 	
 	private StaticGrid pruneHelper(int remainingGivens) {
-		if (remainingGivens < minAchieved) {
-			minAchieved = remainingGivens;
-			if (remainingGivens < 30) {
-				//System.out.println(remainingGivens);
-			}
-		}
-		
-		// Recursion end condition
+		// Return grid if target number of givens is reached (grid will propagate and end the recursion)
 		if (remainingGivens == givensTarget) {
-			StaticGrid potentialSudoku = new StaticGrid(this);
-			// Solve logically
-			return potentialSudoku;
+			return new StaticGrid(this);
 		}
 		
-		// Store remaining given cells in a stack and shuffle
+		// If target number of givens hasn't been reached, try digging each of the remaining cells
+		// Store remaining given cells in a stack and shuffle to ensure randomness
 		Stack<Cell> cellsToDig = new Stack<Cell>();
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -139,10 +123,10 @@ public class GeneratorGrid extends DynamicGrid {
 		while(!cellsToDig.isEmpty()) {
 			GeneratorCell cell = (GeneratorCell) cellsToDig.pop();
 			
-			// Digging cell
+			// Dig cell
 			cell.dig();
 			
-			// Solving resulting grid to test for unique solution
+			// Solve resulting grid and test for unique solution
 			Solver s = new Solver(new StaticGrid(this));
 			try {
 				s.solve(SolverMode.STOP_SECOND_SOLUTION);
@@ -157,7 +141,8 @@ public class GeneratorGrid extends DynamicGrid {
 				// Recurse on the dug grid
 				StaticGrid validSudoku = pruneHelper(remainingGivens - 1);
 				
-				// If valid sudoku (grid has target difficulty and number of givens), return it (ie. kill recursion)
+				// If a grid was returned by the recursive call, it means a valid solution was found
+				// Propagate the solution to parent recursive calls to end the recursion
 				if (validSudoku != null) {
 					return validSudoku;
 				}
@@ -166,14 +151,15 @@ public class GeneratorGrid extends DynamicGrid {
 			// Digging the cell hasn't returned a valid Sudoku grid; backtrack by undigging the cell
 			cell.reset();
 		}
-		
-		// None of the remaining given cells lead to a valid Sudoku
-		return null;
+
+		// Cannot remove any more givens: none of the remaining given cells leads to a valid Sudoku
+		// Return current grid, which is a valid solution (grid will be propagated by parent recursive calls until recursion ends)
+		return new StaticGrid(this);
 	}
 	
 	
 	/*
-	 * For validation
+	 * Used to validate the grid
 	 */
 	public int getGivensCount() {
 		int count = 0;

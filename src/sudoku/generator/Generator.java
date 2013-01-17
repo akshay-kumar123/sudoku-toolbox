@@ -130,7 +130,7 @@ public class Generator {
 			}
 			
 			if (sudoku != null) {
-				System.out.println("\nSudoku generated:");
+				System.out.println("\nSudoku generated with " + genGrid.getGivensCount() + " givens:");
 				sudoku.printGrid();
 				System.out.println(sudoku.toString());
 				return sudoku;
