@@ -8,7 +8,7 @@ import sudoku.exception.UnitConstraintException;
 public class Unit {
 	
 	private UnitType type;
-	private ArrayList<Cell> cells = new ArrayList<Cell>(9);
+	protected ArrayList<Cell> cells = new ArrayList<Cell>(9);
 
 	public Unit(UnitType type) {
 		this.type = type;

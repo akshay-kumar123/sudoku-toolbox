@@ -20,7 +20,7 @@ public class SolverGridTest {
 
 	@Before
 	public void setUp() throws Exception {
-		grid = new SolverGrid(null, new StaticGrid(TestGrid.VERY_EASY.getGridString()));
+		grid = new SolverGrid(null, new StaticGrid(TestGrid.PIECE_OF_CAKE.getGridString()));
 	}
 
 	@Test
@@ -38,7 +38,7 @@ public class SolverGridTest {
 
 	@Test
 	public void testFillInSingleCandidateCells() throws CandidateNotFoundException, ZeroCandidateException  {
-		grid.fillInNakedSingleCells();
+		grid.nakedSingles();
 		assertTrue(grid.isSolved());
 	}
 	

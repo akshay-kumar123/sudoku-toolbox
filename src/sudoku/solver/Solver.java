@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import sudoku.StaticGrid;
 import sudoku.exception.*;
+import sudoku.generator.Difficulty;
 
 public class Solver {
 
@@ -62,7 +63,24 @@ public class Solver {
 		try {
 			// Solve
 			solverGrid = new SolverGrid(this, grid);
-			if (!solverGrid.propagateConstraints()) {
+			
+			boolean gridChanged, needDPS = true;
+			do {
+				// Naked singles technique
+				solverGrid.nakedSingles();
+				
+				if (solverGrid.isSolved()) {
+					needDPS = false;
+					addSolution(new StaticGrid(solverGrid));
+					break;
+				}
+
+				// Hidden singles technique
+				gridChanged = solverGrid.hiddenSingles();
+			} while (gridChanged);
+			
+			if (needDPS) {
+				// Depth First Search technique
 				solverGrid.depthFirstSearch(goal);
 			}
 			
@@ -86,6 +104,49 @@ public class Solver {
 			// Calculate solving time
 			solvingTime = (System.nanoTime() - startTime) / 1000000;
 		}
+	}
+	
+	public Difficulty determineHumanDifficulty() throws InvalidGridException {
+		// Initialise SolverGrid
+		try {
+			solverGrid = new SolverGrid(this, grid);
+		} catch (ZeroCandidateException e) {
+			result = SolverResult.NO_SOLUTION;
+		} catch (UnitConstraintException e) {
+			throw new InvalidGridException("The grid does not respect the rules of Sudoku");
+		}
+		
+		// Start from lowest difficulty level
+		Difficulty maxDiff = Difficulty.PIECE_OF_CAKE;
+	
+		// Solve with human techniques until EVIL difficulty is reached or grid is solved
+		while (maxDiff.getIndex() < Difficulty.EVIL.getIndex() && !solverGrid.isSolved()) {
+			Difficulty newDiff = solveWithHumanTechniques();
+
+			if (maxDiff.getIndex() < newDiff.getIndex()) {
+				maxDiff = newDiff;
+			}
+		}
+		
+		return maxDiff;
+	}
+	
+	public Difficulty solveWithHumanTechniques() {
+		Difficulty diff = Difficulty.PIECE_OF_CAKE;
+		
+		try {
+			// Always try filling naked singles first
+			solverGrid.nakedSingles();
+			
+			if (solverGrid.hiddenSingles()) {
+				diff = Difficulty.EASY;
+			}
+		} catch (ZeroCandidateException | CandidateNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return diff;
 	}
 	
 	

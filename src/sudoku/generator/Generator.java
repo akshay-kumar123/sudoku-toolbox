@@ -108,38 +108,33 @@ public class Generator {
 	}
 	
 	public StaticGrid generateSudoku(Difficulty difficulty, boolean preFill) {
-		for (int i = 0; i < 10; i++) {
-			GeneratorGrid genGrid = null;
-			StaticGrid terminalPattern = generateTerminalPattern(preFill); 
-			
-			try {
-				genGrid = new GeneratorGrid(terminalPattern);
-			} catch (UnitConstraintException | ZeroCandidateException e) {
-				// This should never happen
-				System.out.println("Program error: terminal pattern provided to GeneratorGrid constructor is invalid.");
-				System.exit(1);
-			}
+		GeneratorGrid genGrid = null;
+		StaticGrid terminalPattern = generateTerminalPattern(preFill); 
+		
+		try {
+			genGrid = new GeneratorGrid(terminalPattern);
+		} catch (UnitConstraintException | ZeroCandidateException e) {
+			// This should never happen
+			System.out.println("Program error: terminal pattern provided to GeneratorGrid constructor is invalid.");
+			System.exit(1);
+		}
 
-			StaticGrid sudoku = null;
-			try {
-				sudoku = genGrid.prune(difficulty);
-			} catch (GeneratorGridException e) {
-				// This should never happen
-				System.out.println("Program error: terminal pattern provided for pruning is not terminal.");
-				System.exit(1);
-			}
-			
-			if (sudoku != null) {
-				System.out.println("\nSudoku generated with " + genGrid.getGivensCount() + " givens:");
-				sudoku.printGrid();
-				System.out.println(sudoku.toString());
-				return sudoku;
-			} else {
-				System.out.println("Failed to generate Sudoku with target difficulty. Trying with another terminal pattern...");
-			}
+		StaticGrid sudoku = null;
+		try {
+			sudoku = genGrid.prune(difficulty);
+		} catch (GeneratorGridException e) {
+			// This should never happen
+			System.out.println("Program error: terminal pattern provided for pruning is not terminal.");
+			System.exit(1);
 		}
 		
-		return null;
+		if (sudoku != null) {
+			System.out.println("\nSudoku generated with " + genGrid.getGivensCount() + " givens:");
+			sudoku.printGrid();
+			System.out.println(sudoku.toString());
+		}
+		
+		return sudoku;
 	}
 
 }

@@ -102,10 +102,6 @@ public abstract class Cell {
 	}
 	
 	
-	public String toString() {
-		return candidatesToString();
-	}
-	
 	public String candidatesToString() {
 		String s = "[";
 		for (int c : candidates) {

@@ -1,6 +1,5 @@
 package sudoku.solver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import sudoku.Cell;
@@ -10,26 +9,23 @@ import sudoku.exception.ZeroCandidateException;
 
 public class SolverUnit extends Unit {
 	
-	private ArrayList<Cell> cells = new ArrayList<Cell>(9);
-
-	
 	public SolverUnit() {
 		super(null);
 	}
 
 	
-	public boolean findUnitLoner() throws CandidateNotFoundException, ZeroCandidateException {
+	public boolean hiddenSingles() throws CandidateNotFoundException, ZeroCandidateException {
 		boolean lonersCount = false;
 		
 		int[] candidateCounters = new int[9];
-		Cell[] candidateOwners = new Cell[9];
+		SolverCell[] candidateOwners = new SolverCell[9];
 		Arrays.fill(candidateCounters, 0);
 		
 		for (Cell c : cells) {
 			if (!c.isFilled()) {
-				for (int candidate : c.getCandidates()) {
+				for (Integer candidate : c.getCandidates()) {
 					candidateCounters[candidate - 1]++;
-					candidateOwners[candidate - 1] = c;
+					candidateOwners[candidate - 1] = (SolverCell) c;
 				}
 			}
 		}
@@ -37,7 +33,11 @@ public class SolverUnit extends Unit {
 		for (int i = 0; i < 9; i++) {
 			if (candidateCounters[i] == 1) {
 				lonersCount = true;
-				candidateOwners[i].chooseCandidate(i + 1);
+				// Do not choose hidden single if cell is already filled, or if it is the only candidate in the cell
+				// If it is the only candidate in the cell, then it has already been marked as a naked single and will be processed later 
+				if (!candidateOwners[i].isFilled() && !candidateOwners[i].hasSingleCandidate()) {
+					candidateOwners[i].chooseCandidate(i + 1);
+				}
 			}
 		}
 		

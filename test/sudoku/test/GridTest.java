@@ -17,7 +17,7 @@ public class GridTest {
 	
 	@Before
 	public void setUp() throws InvalidGridException {
-		testGrid =  new StaticGrid(TestGrid.VERY_EASY.getGridString());
+		testGrid =  new StaticGrid(TestGrid.PIECE_OF_CAKE.getGridString());
 	}
 	
 	@Test
@@ -28,7 +28,7 @@ public class GridTest {
 	
 	@Test
 	public void testGridFromString() {
-		assertEquals(TestGrid.VERY_EASY.getGridString(), testGrid.toString());
+		assertEquals(TestGrid.PIECE_OF_CAKE.getGridString(), testGrid.toString());
 	}
 	
 	@Test

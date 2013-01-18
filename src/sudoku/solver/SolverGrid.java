@@ -67,11 +67,13 @@ public class SolverGrid extends DynamicGrid {
 		}
 	}
 	
-	public void fillInNakedSingleCells() throws ZeroCandidateException {
+	public void nakedSingles() throws ZeroCandidateException {
 		while (!nakedSingleCells.empty()) {
 			SolverCell c = nakedSingleCells.pop();
 			try {
-				c.chooseUniqueCandidate();
+				if (!c.isFilled()) {
+					c.chooseUniqueCandidate();
+				}
 			} catch (NotUniqueCandidateException e) {
 				// This should never happen
 				/* Note that a ZeroCandidateException occurs when the processing of another naked single cell higher in the stack 
@@ -83,33 +85,17 @@ public class SolverGrid extends DynamicGrid {
 		}
 	}
 	
-	
-	public boolean propagateConstraints() throws CandidateNotFoundException, ZeroCandidateException {
-		fillInNakedSingleCells();
+	public boolean hiddenSingles() throws CandidateNotFoundException, ZeroCandidateException {
+		boolean foundHiddenSingles = false;
+
+		// Find and choose hidden singles in all units
+		for (Unit u : units) {
+			if (((SolverUnit) u).hiddenSingles()) {
+				foundHiddenSingles = true;
+			}
+		}
 		
-		boolean gridChanged;
-		do {
-			if (isSolved()) {
-				solver.addSolution(new StaticGrid(this));
-				// Grid is solved
-				return true;
-			}
-
-			gridChanged = false;
-			
-			for (Unit u : units) {
-				// Find loner candidate in unit; if one exist, it will be chosen directly
-				if (((SolverUnit) u).findUnitLoner()) {
-					// Loner was found and chosen, which means that the grid has changed
-					gridChanged = true;
-					// Since the grid has changed, there might be some new naked single cells waiting to be filled
-					fillInNakedSingleCells();
-				}
-			}
-		} while (gridChanged);
-
-		// Grid is not solved yet
-		return false;
+		return foundHiddenSingles;
 	}
 	
 	public boolean depthFirstSearch(SolverMode goal) {
@@ -133,7 +119,7 @@ public class SolverGrid extends DynamicGrid {
 				try {
 					dpsCell.chooseCandidate(i);
 					// Fill in any single-candidate cell before pursuing
-					fillInNakedSingleCells();
+					nakedSingles();
 					if (depthFirstSearch(goal) == STOP_DPS) {
 						return STOP_DPS;
 					}

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import sudoku.StaticGrid;
 import sudoku.exception.InvalidGridException;
+import sudoku.generator.Difficulty;
 import sudoku.solver.Solver;
 import sudoku.solver.SolverMode;
 import sudoku.solver.SolverResult;
@@ -37,8 +38,8 @@ public class SolverTest {
 	}
 
 	@Test
-	public void testSolveDifficultGrid() throws InvalidGridException {
-		Solver s = new Solver(new StaticGrid(TestGrid.DIFFICULT.getGridString()));
+	public void testSolveHardGrid() throws InvalidGridException {
+		Solver s = new Solver(new StaticGrid(TestGrid.HARD.getGridString()));
 		s.solve(SolverMode.DO_NOT_STOP);
 		assertTrue(s.getSolvingTime() < 30);
 	}
@@ -76,6 +77,18 @@ public class SolverTest {
 		Solver s = new Solver(new StaticGrid(TestGrid.NO_SOLUTION.getGridString()));
 		s.solve(SolverMode.DO_NOT_STOP);
 		assertEquals(SolverResult.NO_SOLUTION, s.getResult());
+	}
+	
+	@Test
+	public void testDetermineHumanDifficultyPieceOfCakeGrid() throws InvalidGridException {
+		Solver s = new Solver(new StaticGrid(TestGrid.PIECE_OF_CAKE.getGridString()));
+		assertEquals(Difficulty.PIECE_OF_CAKE, s.determineHumanDifficulty());
+	}
+	
+	@Test
+	public void testDetermineHumanDifficultyEasyGrid() throws InvalidGridException {
+		Solver s = new Solver(new StaticGrid(TestGrid.EASY.getGridString()));
+		assertEquals(Difficulty.EASY, s.determineHumanDifficulty());
 	}
 
 }
